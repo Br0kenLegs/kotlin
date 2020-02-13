@@ -197,7 +197,6 @@ private val inspectionLikePostProcessingGroup =
         RemoveRedundantConstructorKeywordProcessing(),
         RemoveExplicitOpenInInterfaceProcessing(),
         RemoveRedundantOverrideVisibilityProcessing(),
-        MoveLambdaOutsideParenthesesProcessing(),
         intentionBasedProcessing(ConvertToStringTemplateIntention(), writeActionNeeded = false) {
             ConvertToStringTemplateIntention.shouldSuggestToConvert(it)
         },
@@ -289,6 +288,10 @@ private val processings: List<NamedPostProcessingGroup> = listOf(
             errorsFixingDiagnosticBasedPostProcessingGroup,
             addOrRemoveModifiersProcessingGroup,
             inspectionLikePostProcessingGroup,
+            InspectionLikeProcessingGroup(
+                runSingleTime = true,
+                processings = listOf(MoveLambdaOutsideParenthesesProcessing()),
+            ),
             removeRedundantSemicolonProcessing,
             removeRedundantElementsProcessingGroup,
             cleaningUpDiagnosticBasedPostProcessingGroup

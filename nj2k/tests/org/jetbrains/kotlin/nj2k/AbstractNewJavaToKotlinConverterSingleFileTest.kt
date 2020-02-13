@@ -44,7 +44,7 @@ abstract class AbstractNewJavaToKotlinConverterSingleFileTest : AbstractJavaToKo
     override fun fileToKotlin(text: String, settings: ConverterSettings, project: Project): String {
         val file = createJavaFile(text)
         return NewJavaToKotlinConverter(project, module, settings, IdeaJavaToKotlinServices)
-            .filesToKotlin(listOf(file), NewJ2kPostProcessor()).results.single()
+            .runJ2kInBackground(listOf(file), project).results.single()
     }
 
     override fun provideExpectedFile(javaPath: String): File =

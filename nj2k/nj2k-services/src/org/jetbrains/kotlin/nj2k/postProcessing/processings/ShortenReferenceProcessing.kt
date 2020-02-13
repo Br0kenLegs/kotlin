@@ -5,9 +5,12 @@
 
 package org.jetbrains.kotlin.nj2k.postProcessing.processings
 
+import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.editor.RangeMarker
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.idea.core.ShortenReferences
+import org.jetbrains.kotlin.idea.util.ActionRunningMode
+import org.jetbrains.kotlin.idea.util.application.runReadAction
 import org.jetbrains.kotlin.nj2k.JKImportStorage
 import org.jetbrains.kotlin.nj2k.NewJ2kConverterContext
 import org.jetbrains.kotlin.nj2k.postProcessing.FileBasedPostProcessing
@@ -29,13 +32,19 @@ class ShortenReferenceProcessing : FileBasedPostProcessing() {
     }
 
     override fun runProcessing(file: KtFile, allFiles: List<KtFile>, rangeMarker: RangeMarker?, converterContext: NewJ2kConverterContext) {
-        runUndoTransparentActionInEdt(inWriteAction = false) {
+        CommandProcessor.getInstance().runUndoTransparentAction {
             if (rangeMarker != null) {
                 if (rangeMarker.isValid) {
-                    ShortenReferences.DEFAULT.process(file, rangeMarker.startOffset, rangeMarker.endOffset, filter)
+                    ShortenReferences.DEFAULT.process(
+                        file,
+                        rangeMarker.startOffset,
+                        rangeMarker.endOffset,
+                        filter,
+                        actionRunningMode = ActionRunningMode.RUN_IN_EDT_EXPLICITLY
+                    )
                 }
             } else {
-                ShortenReferences.DEFAULT.process(file, filter)
+                ShortenReferences.DEFAULT.process(file, filter, actionRunningMode = ActionRunningMode.RUN_IN_EDT_EXPLICITLY)
             }
         }
     }

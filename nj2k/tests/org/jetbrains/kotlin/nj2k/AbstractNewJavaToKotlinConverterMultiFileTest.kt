@@ -5,8 +5,10 @@
 
 package org.jetbrains.kotlin.nj2k
 
+import com.intellij.openapi.progress.ProgressManager
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiManager
+import org.jetbrains.kotlin.idea.actions.JavaToKotlinAction
 import org.jetbrains.kotlin.idea.formatter.commitAndUnblockDocument
 import org.jetbrains.kotlin.idea.j2k.IdeaJavaToKotlinServices
 import org.jetbrains.kotlin.idea.test.KotlinWithJdkAndRuntimeLightProjectDescriptor
@@ -42,10 +44,8 @@ abstract class AbstractNewJavaToKotlinConverterMultiFileTest : AbstractJavaToKot
         }
 
         val converter = NewJavaToKotlinConverter(project, module, ConverterSettings.defaultSettings, IdeaJavaToKotlinServices)
-        val (results, externalCodeProcessor) = converter.filesToKotlin(
-            psiFilesToConvert,
-            NewJ2kPostProcessor()
-        )
+        val (results, externalCodeProcessor) = converter.runJ2kInBackground(psiFilesToConvert, project)
+
         val process = externalCodeProcessor?.prepareWriteOperation(progress = null)
 
         fun expectedResultFile(i: Int) = File(filesToConvert[i].path.replace(".java", ".kt"))

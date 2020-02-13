@@ -56,6 +56,9 @@ class NewJavaToKotlinConverter(
         postProcessor: PostProcessor,
         progress: ProgressIndicator
     ): FilesResult {
+        assert(!ApplicationManager.getApplication().isDispatchThread) {
+            "J2K Should not be run in EDT thread"
+        }
         progress.isIndeterminate = false
         val phasesCount = postProcessor.phasesCount + 1
         val withProgressProcessor = NewJ2kWithProgressProcessor(progress, files, phasesCount)
