@@ -264,7 +264,7 @@ class JavaToJKTreeBuilder constructor(
                 JavaTokenType.NULL_KEYWORD -> JKLiteralExpression("null", NULL)
                 JavaTokenType.TRUE_KEYWORD -> JKLiteralExpression("true", BOOLEAN)
                 JavaTokenType.FALSE_KEYWORD -> JKLiteralExpression("false", BOOLEAN)
-                JavaTokenType.STRING_LITERAL -> JKLiteralExpression(text, STRING)
+                JavaTokenType.STRING_LITERAL, JavaTokenType.TEXT_BLOCK_LITERAL -> JKLiteralExpression(text, STRING)
                 JavaTokenType.CHARACTER_LITERAL -> JKLiteralExpression(text, CHAR)
                 JavaTokenType.INTEGER_LITERAL -> JKLiteralExpression(text, INT)
                 JavaTokenType.LONG_LITERAL -> JKLiteralExpression(text, LONG)
